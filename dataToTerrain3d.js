@@ -10,6 +10,11 @@ The posit should be the lat-long to 2 decimal places of the NW corner of the box
 The latitude should a decimal between -89.5 and 89.5 ( points >80 or <-80 may create confusing maps due to position near poles of earth).
 The longitude should a decimal between -179.49 to 179.49.
 
+Attributions / References:
+https://open-elevation.com
+https://github.com/Jorl17/open-elevation/blob/master/docs/api.md
+https://api.open-elevation.com/api/v1/lookup?locations=41.161758,-8.583933
+
 Todo:
 get lat long of "box" from form using data entry form
 parse API result JSON, building elevation grid
@@ -32,6 +37,7 @@ Figure out API request
 //    let elevMatrix = []; //{x: 0, y: 0, lat: coord.lat, long: coord.long, elev: 0}
     let url = "";
     let bod = "";
+    let resStr = "";
 
     function buildRequest(posit) { // posit is an object {latitude to 2 decimal places, longitude to 2 decimal places}
         url = "https://api.open-elevation.com/api/v1/lookup";
@@ -51,15 +57,8 @@ Figure out API request
         bod = JSON.parse(bodStr);
         console.log(bod);
     }
+
     //https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
-    //https://github.com/Jorl17/open-elevation/blob/master/docs/api.md
-    //https://api.open-elevation.com/api/v1/lookup?locations=37.500,127.600
-
-
-    // let elev = getElevationFromAPI(url, bod);
-    // console.log(elev);
-
-
 
     async function getElevationFromAPI(url, data) {
         let resp = fetch(url, {
@@ -72,13 +71,13 @@ Figure out API request
             },
             body: JSON.stringify(data)
         })
-            .then((response) => response.json())
+            .then((response) => (response.json()))
             //.then ((data) => console.log(data))
             .catch(errorMsg => { console.log(errorMsg);});
         return resp;
     }
 
     buildRequest(coord);
-    console.log(getElevationFromAPI(url, bod));
-
+    resStr = getElevationFromAPI(url, bod);
+    console.log(resStr);
 } ());
