@@ -111,6 +111,8 @@ parse API result JSON, building elevation grid
     }
 
     function buildRenderer() {
+        // trying to put renderer into a canvas I made instead of the one Three makes:
+        // https://discourse.threejs.org/t/setting-up-renderers-canvas-element-by-html-id/13213
         let canv = document.getElementById("display");
         renderer = new THREE.WebGLRenderer({
             antialias: true,
