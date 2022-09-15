@@ -35,6 +35,9 @@ allows for saving maps with save button (glsl model)
         }
     }
 
+    //https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+    //https://github.com/Jorl17/open-elevation/blob/master/docs/api.md
+
     async function getElevationFromAPI(url, data) {
         let response = fetch(url, {
             method: 'POST',
