@@ -3,10 +3,7 @@ html, body {
 }
 
 canvas {
-    width: 500px;
-    height: 500px
-}
-
-#webgl {
-
+    position: absolute;
+    top: 15%;
+    left: 15%;
 }
