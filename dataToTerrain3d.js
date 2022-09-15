@@ -34,7 +34,7 @@ Figure out API request
 
 (function() {
     let coord = {lat: 37.500, long: 127.600}; // latitude and longitude to 2 decimal places
-//    let elevMatrix = []; //{x: 0, y: 0, lat: coord.lat, long: coord.long, elev: 0}
+    let elevMatrix = [];
     let url = "";
     let bod = "";
     let resStr = "";
@@ -61,6 +61,7 @@ Figure out API request
     //https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
 
     async function getElevationFromAPI(url, data) {
+        let elevArray = [];
         let resp = fetch(url, {
             method: 'POST',
  //           mode: 'same-origin',
@@ -72,12 +73,16 @@ Figure out API request
             body: JSON.stringify(data)
         })
             .then((response) => (response.json()))
-            //.then ((data) => console.log(data))
+            .then ((data) => {
+                console.log(data.results[0].elevation);
+                for(let i = 0; i < 100; i++) {elevArray.push(data.results[i].elevation)};
+                console.log(elevArray);
+             })
             .catch(errorMsg => { console.log(errorMsg);});
-        return resp;
+        return elevArray;
     }
 
     buildRequest(coord);
-    resStr = getElevationFromAPI(url, bod);
-    console.log(resStr);
+    elevMatrix = getElevationFromAPI(url, bod);
+
 } ());
