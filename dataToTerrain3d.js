@@ -1,18 +1,28 @@
+// Phi Lambda - Data to Terrain 3d
+// Original code by David G. Smith
+// Sep 2022
+
 /*
-builds a .05 x .05 degree "box" of elevation data based on user input of a position then
-converts that grid into a 3d elevation animation.
-posit should be the lat-long to 2 decimal places of the NW corner of the box.
-lat should a decimal between -80 and 80 (>80 or <-80 will create confusing maps due to position near poles of earth)
-longitude can be -180 to 180
-get lat long of "box" from form using data entry and "calculate grid"
+builds a .05 x .05 degree "box" of elevation data based on user input of a latitude and longitude position.
+It then queries the Open Elevation API (https://open-elevation.com) for elevation data for the "box".
+It then uses ThreeJS to build a 3d animation of the terrain for display in a canvas element.
+The posit should be the lat-long to 2 decimal places of the NW corner of the box.
+The latitude should a decimal between -89.5 and 89.5 ( points >80 or <-80 may create confusing maps due to position near poles of earth).
+The longitude should a decimal between -179.49 to 179.49.
+
+Todo:
+get lat long of "box" from form using data entry form
+parse API result JSON, building elevation grid
+Add Three JS structures to render animation
+Fix up appearance of page
+Allow user to "save" maps
+Add screenshot button to make image of canvas
+
+Done:
 build array of data points for request
-    run loops to request, parsing reply into array
+Figure out API request
 
-displays terrain in 3d canvas with orbit controls with display map button
-    build geometry array
-    display
 
-allows for saving maps with save button (glsl model)
 
 
 */
@@ -26,8 +36,8 @@ allows for saving maps with save button (glsl model)
     function buildRequest(posit) { // posit is an object {latitude to 2 decimal places, longitude to 2 decimal places}
         url = "https://api.open-elevation.com/api/v1/lookup";
         let bodStr = '{"locations": [';
-        for (let i = 0; i < 2; i ++) {
-            for (let j = 0; j < 2; j ++) {
+        for (let i = 0; i < 10; i ++) {
+            for (let j = 0; j < 10; j ++) {
                 let latitude = (posit.lat - (i/100.0)).toFixed(3);
                 let longitude = (posit.long + (j/100.0)).toFixed(3);
                 bodStr += '{"latitude": ' + latitude + ', "longitude": ' + longitude + '},'
