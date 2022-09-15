@@ -7,3 +7,5 @@ Builds a .05 x .05 degree "box" of elevation data based on user input of a latit
 It then queries the Open Elevation API (https://open-elevation.com) for elevation data for the "box".
 It then uses ThreeJS to build a 3d animation of the terrain for display in a canvas element.
 By the way - Phi = Latitude, Lambda = Longitude.
+
+I added a github pages deployment for this too.  See the side menus on this repo.
