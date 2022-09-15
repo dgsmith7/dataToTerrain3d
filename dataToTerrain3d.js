@@ -100,11 +100,21 @@ parse API result JSON, building elevation grid
     }
 
     function setScene() {
-
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x000000);
     }
 
     function setCamera() {
-
+        camera = new THREE.PerspectiveCamera(
+            45,
+            window.innerWidth / window.innerHeight,
+            1,
+            1000
+        );
+        camera.position.x = 5;
+        camera.position.y = 3;
+        camera.position.z = 5;
+        scene.add(camera);
     }
 
     function setLights() {
