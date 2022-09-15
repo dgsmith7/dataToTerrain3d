@@ -14,6 +14,7 @@ Attributions / References:
 https://open-elevation.com
 https://github.com/Jorl17/open-elevation/blob/master/docs/api.md
 https://api.open-elevation.com/api/v1/lookup?locations=41.161758,-8.583933
+Using my own old template for the Three stuff (for now): https://github.com/1ofx/templates/tree/main/threejs
 
 Todo:
 get lat long of "box" from form using data entry form
@@ -107,8 +108,16 @@ parse API result JSON, building elevation grid
     }
 
     function setLights() {
-
-    }
+        ambLt = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambLt);
+        dirLt = new THREE.DirectionalLight(0xffffff, 0.5);
+        dirLt.position.set(0, 15, 0);
+        scene.add(dirLt);
+        spotLt = new THREE.SpotLight(0xffffff, 0.5);
+        spotLt.position.set(5, 1, 2);
+        spotLt.decay = 2.0;
+        scene.add(spotLt);
+}
 
     function buildRenderer() {
         // trying to put renderer into a canvas I made instead of the one Three makes:
@@ -137,6 +146,8 @@ parse API result JSON, building elevation grid
     }
 
     function buildTerrain() {
+        // right now we are just throwing a standard block animation into the canvas.
+        // Later we will build terrain with elevMatrix.
         geometry = new THREE.BoxGeometry(2, 2, 2);
         material = new THREE.MeshPhongMaterial({
             color: "purple",
