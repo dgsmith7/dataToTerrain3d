@@ -17,22 +17,24 @@ https://api.open-elevation.com/api/v1/lookup?locations=41.161758,-8.583933
 
 Todo:
 get lat long of "box" from form using data entry form
-parse API result JSON, building elevation grid
-Add Three JS structures to render animation
 Fix up appearance of page
 Allow user to "save" maps
 Add screenshot button to make image of canvas
 
+In progress:
+Add Three JS structures to render animation
+
 Done:
 build array of data points for request
 Figure out API request
-
-
-
-
+parse API result JSON, building elevation grid
 */
 
 (function() {
+    //Three stuff:
+    let container, scene, camera, renderer, ambLt, dirLT, spotLt, geometry, material, mesh, controls;
+
+    //Other stuff:
     let coord = {lat: 37.500, long: 127.600}; // latitude and longitude to 2 decimal places
     let elevMatrix = [];
     let url = "";
@@ -82,7 +84,24 @@ Figure out API request
         return elevArray;
     }
 
+function init() {
     buildRequest(coord);
     elevMatrix = getElevationFromAPI(url, bod);
+    setScene();
+    setCamera();
+    setLights();
+    buildRenderer();
+    container = renderer.domElement;
+    document.body.appendChild(container);
+    buildTerrain();
+    addOrbitControls();
+    window.addEventListener("resize", onWindowResize);
+}
 
+function animate() {
+
+}
+
+    init();
+    animate();
 } ());
