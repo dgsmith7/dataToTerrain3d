@@ -84,23 +84,79 @@ parse API result JSON, building elevation grid
         return elevArray;
     }
 
-function init() {
-    buildRequest(coord);
-    elevMatrix = getElevationFromAPI(url, bod);
-    setScene();
-    setCamera();
-    setLights();
-    buildRenderer();
-    container = renderer.domElement;
-    document.body.appendChild(container);
-    buildTerrain();
-    addOrbitControls();
-    window.addEventListener("resize", onWindowResize);
-}
+    function init() {
+        buildRequest(coord);
+        elevMatrix = getElevationFromAPI(url, bod);
+        setScene();
+        setCamera();
+        setLights();
+        buildRenderer();
+        container = renderer.domElement;
+        document.body.appendChild(container);
+        buildTerrain();
+        addOrbitControls();
+        window.addEventListener("resize", onWindowResize);
+    }
 
-function animate() {
+    function setScene() {
 
-}
+    }
+
+    function setCamera() {
+
+    }
+
+    function setLights() {
+
+    }
+
+    function buildRenderer() {
+        let canv = document.getElementById("display");
+        renderer = new THREE.WebGLRenderer({
+            antialias: true,
+            canvas: canv
+        });
+        renderer.setSize(window.innerWidth, window.innerHeight, true);
+        renderer.setPixelRatio(window.devicePixelRatio || 1);
+    }
+
+    function animate() {
+        requestAnimationFrame(animate);
+        render();
+    }
+
+    function render() {
+        updateScene();
+        renderer.render(scene, camera);
+    }
+
+    function updateScene() {
+        controls.update();
+    }
+
+    function buildTerrain() {
+        geometry = new THREE.BoxGeometry(2, 2, 2);
+        material = new THREE.MeshPhongMaterial({
+            color: "purple",
+            side: THREE.DoubleSide,
+        });
+        mesh = new THREE.Mesh(geometry, material);
+        scene.add(mesh);
+        console.log(scene);
+    }
+
+    function addOrbitControls() {
+        controls = new THREE.OrbitControls(camera, container);
+        controls.minDistance = 5;
+        controls.maxDistance = 50;
+        controls.autoRotate = true;
+    }
+
+    function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    }
 
     init();
     animate();
