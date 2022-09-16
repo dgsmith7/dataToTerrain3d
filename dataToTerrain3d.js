@@ -15,6 +15,7 @@ https://open-elevation.com
 https://github.com/Jorl17/open-elevation/blob/master/docs/api.md
 https://api.open-elevation.com/api/v1/lookup?locations=41.161758,-8.583933
 Using my own old template for the Three stuff (for now): https://github.com/1ofx/templates/tree/main/threejs
+Pulled my terrain generation code from 'Terranium' workup on Baconbits
 
 Todo:
 get lat long of "box" from form using data entry form
@@ -23,12 +24,12 @@ Allow user to "save" maps
 Add screenshot button to make image of canvas
 
 In progress:
-Add Three JS structures to render animation
 
 Done:
 build array of data points for request
 Figure out API request
 parse API result JSON, building elevation grid
+Add Three JS structures to render animation
 */
 
 (function() {
@@ -177,7 +178,7 @@ parse API result JSON, building elevation grid
 
     function buildTerrain() {
         // right now we are just throwing a standard block animation into the canvas.
-        // Later we will build terrain with elevMatrix.
+        // Later we will build terrain with elevMatrix.  -  se funtion below
         geometry = new THREE.BoxGeometry(2, 2, 2);
         material = new THREE.MeshPhongMaterial({
             color: "purple",
