@@ -164,7 +164,8 @@ Add Three JS structures to render animation
             antialias: true,
             canvas: canv
         });
-        renderer.setSize(window.innerWidth, window.innerHeight, true);
+//        renderer.setSize(window.innerWidth, window.innerHeight, true);
+        renderer.setSize(canv.clientWidth, canv.clientHeight, true);
         renderer.setPixelRatio(window.devicePixelRatio || 1);
     }
 
@@ -315,8 +316,6 @@ Add Three JS structures to render animation
         console.log(document.getElementById("latitude").value);
         console.log(document.getElementById("longitude").value);
         console.log(document.getElementById("title").value);
-
-
     }
 
     async function go() {
