@@ -33,14 +33,23 @@ parse API result JSON, building elevation grid
 
 (function() {
     //Three stuff:
-    let container, scene, camera, renderer, ambLt, dirLT, spotLt, geometry, material, mesh, controls;
+    let container,
+        scene,
+        camera,
+        renderer,
+        ambLt,
+        dirLt,
+        spotLt,
+        geometry,
+        material,
+        mesh,
+        controls;
 
     //Other stuff:
-    let coord = {lat: 37.500, long: 127.600}; // latitude and longitude to 2 decimal places
+    let coord = {lat: 37.500, long: 127.600}; // Battle of ChipYongNi - lat-long to 2 decimal places
     let elevMatrix = [];
     let url = "";
     let bod = "";
-    let resStr = "";
 
     function buildRequest(posit) { // posit is an object {latitude to 2 decimal places, longitude to 2 decimal places}
         url = "https://api.open-elevation.com/api/v1/lookup";
@@ -50,7 +59,6 @@ parse API result JSON, building elevation grid
                 let latitude = (posit.lat - (i/100.0)).toFixed(3);
                 let longitude = (posit.long + (j/100.0)).toFixed(3);
                 bodStr += '{"latitude": ' + latitude + ', "longitude": ' + longitude + '},'
-//                elevMatrix.push({x: i, y: j, lat: latitude, long: longitude});
             }
         }
         bodStr = bodStr.slice(0,bodStr.length-1);
@@ -62,32 +70,33 @@ parse API result JSON, building elevation grid
     }
 
     //https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
-
-    async function getElevationFromAPI(url, data) {
+    async function getElevationFromAPI(url, input) {
         let elevArray = [];
         let resp = fetch(url, {
             method: 'POST',
- //           mode: 'same-origin',
+ //           mode: 'no-cors',
             credentials: 'same-origin',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(input)
         })
             .then((response) => (response.json()))
             .then ((data) => {
-                console.log(data.results[0].elevation);
+ //               console.log(data.results[0].elevation);  // elev for one point
+                console.log("From inside: ");
                 for(let i = 0; i < 100; i++) {elevArray.push(data.results[i].elevation)};
                 console.log(elevArray);
+                init();
              })
             .catch(errorMsg => { console.log(errorMsg);});
         return elevArray;
     }
 
-    function init() {
-        buildRequest(coord);
-        elevMatrix = getElevationFromAPI(url, bod);
+    function init() { // I want this to go only after data is fetched
+        console.log("From outside: ");
+        console.log("data is: " + elevMatrix);
         setScene();
         setCamera();
         setLights();
@@ -97,6 +106,7 @@ parse API result JSON, building elevation grid
         buildTerrain();
         addOrbitControls();
         window.addEventListener("resize", onWindowResize);
+        animate();
     }
 
     function setScene() {
@@ -181,6 +191,12 @@ parse API result JSON, building elevation grid
         renderer.setSize(window.innerWidth, window.innerHeight);
     }
 
-    init();
-    animate();
+    async function go() {
+        buildRequest(coord);
+        elevMatrix = await getElevationFromAPI(url, bod);//.then(() => init());
+        // moved init into success area of API call promise
+    }
+
+    go();
+
 } ());
