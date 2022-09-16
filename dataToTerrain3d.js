@@ -61,6 +61,12 @@ Add Three JS structures to render animation
          p4: { x: 0.38, y: 0.36, z: 0.27 },
      };
 
+     function processForm() {
+         for (let i = 0; i < 500; i += i) {
+             console.log(i);
+         }
+     }
+
     function buildRequest(posit) { // posit is an object {latitude to 2 decimal places, longitude to 2 decimal places}
         url = "https://api.open-elevation.com/api/v1/lookup";
         let bodStr = '{"locations": [';
@@ -304,9 +310,19 @@ Add Three JS structures to render animation
         renderer.setSize(window.innerWidth, window.innerHeight);
     }
 
+    function showFormData() {
+        console.log("Dumping form data.");
+        console.log(document.getElementById("latitude").value);
+        console.log(document.getElementById("longitude").value);
+        console.log(document.getElementById("title").value);
+
+
+    }
+
     async function go() {
-        buildRequest(coord);
-        elevMatrix = await getElevationFromAPI(url, bod);//.then(() => init());
+         document.getElementById("locDataSubmitButton").onclick = showFormData;
+         buildRequest(coord);
+         elevMatrix = await getElevationFromAPI(url, bod);//.then(() => init());
         // moved init into success area of API call promise
     }
 
