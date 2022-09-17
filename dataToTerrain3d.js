@@ -79,47 +79,48 @@ Add Three JS structures to render animation
         }
         bodStr = bodStr.slice(0, bodStr.length-1);
         bodStr += ']}';
-        console.log(url);
-        console.log(bodStr);
+        //console.log(url);
+        //console.log(bodStr);
         bod = JSON.parse(bodStr);
-        console.log(bod);
+        //console.log(bod);
     }
 
-    //https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
-    async function getElevationFromAPI(url, input) {
-        let elevArray = [];
-        let resp = fetch(url, {
-            method: 'POST',
- //           mode: 'no-cors',
-            credentials: 'same-origin',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(input)
-        })
+    function getElevationFromAPI(url, input) {
+//        let elevArray = [];
+//        let resp =
+            fetch(url, {
+                method: 'POST',
+//               mode: 'no-cors',
+                credentials: 'same-origin',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(input)
+            })
             .then((response) => (response.json()))
             .then ((data) => {
- //               console.log(data.results[0].elevation);  // elev for one point
-                console.log("From inside: ");
-                for(let i = 0; i < totalPoints; i++) {elevArray.push(data.results[i].elevation)};
-                console.log(elevArray);
-                init();
-             })
+//             console.log(data.results[0].elevation);  // elev for one point
+//             console.log("From inside: ");
+                for(let i = 0; i < totalPoints; i++) {elevMatrix.push(data.results[i].elevation)};
+//              console.log(elevMatrix);
+//              init();
+            })
+            .then(init)
             .catch(errorMsg => { console.log(errorMsg);});
-        return elevArray;
+//          return elevArray;
     }
 
     function init() { // I want this to go only after data is fetched
-        console.log("From outside: ");
-        console.log("data is: " + elevMatrix);
+        //console.log("From outside: ");
+        //console.log("data is: " + elevMatrix);
         setScene();
         setCamera();
         setLights();
         buildRenderer();
         container = renderer.domElement;
         document.body.appendChild(container);
-        // buildTerrain();
+        buildTerrain();
         buildTerrainFromData();
         addOrbitControls();
         window.addEventListener("resize", onWindowResize);
@@ -164,7 +165,7 @@ Add Three JS structures to render animation
             antialias: true,
             canvas: canv
         });
-//        renderer.setSize(window.innerWidth, window.innerHeight, true);
+//      renderer.setSize(window.innerWidth, window.innerHeight, true);
         renderer.setSize(canv.clientWidth, canv.clientHeight, true);
         renderer.setPixelRatio(window.devicePixelRatio || 1);
     }
@@ -193,7 +194,7 @@ Add Three JS structures to render animation
         });
         mesh = new THREE.Mesh(geometry, material);
         scene.add(mesh);
-        console.log(scene);
+        //console.log(scene);
     }
 
     function buildTerrainFromData() {
@@ -202,7 +203,7 @@ Add Three JS structures to render animation
         for (let i = 0; i < elevMatrix.length; i ++) {
             elevMatrix[i] /= 50.0;
         }
-        console.log('After shift: ' + elevMatrix);
+        //console.log('After shift: ' + elevMatrix);
         // build
         let vertices = [];
         for (let i = 0; i < pointsDim - 1; i ++) {
@@ -318,13 +319,16 @@ Add Three JS structures to render animation
         console.log(document.getElementById("title").value);
     }
 
-    async function go() {
-         document.getElementById("locDataSubmitButton").onclick = showFormData;
-         buildRequest(coord);
-         elevMatrix = await getElevationFromAPI(url, bod);//.then(() => init());
-        // moved init into success area of API call promise
-    }
+    // async function go() {
+    //      document.getElementById("locDataSubmitButton").onclick = showFormData;
+    //      buildRequest(coord);
+    //      elevMatrix = await getElevationFromAPI(url, bod);//.then(() => init());
+    //     // moved init into success area of API call promise
+    // }
 
-    go();
+    //go();
+     document.getElementById("locDataSubmitButton").onclick = showFormData;
+     buildRequest(coord);
+     getElevationFromAPI(url, bod);
 
 } ());
