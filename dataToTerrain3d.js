@@ -48,6 +48,7 @@ Add Three JS structures to render animation
 
     //Other stuff:
     let coord = {lat: 37.500, long: 127.600}; // Battle of ChipYongNi - lat-long to 2 decimal places
+    let titleStr = "The Battle of Chipyong-ni";
     let elevationArray = [];
     let url = "";
     let bod = "";
@@ -353,8 +354,10 @@ Add Three JS structures to render animation
         let latPosit = Number(document.getElementById("latitude").value);
         let longPosit = Number(document.getElementById("longitude").value);
         let newPosit = {lat: latPosit, long: longPosit};
-        console.log("You clicked it. - New position:");
-        console.log(newPosit);
+        document.querySelector("#titleDisplay").innerHTML = document.getElementById("title").value;
+        document.querySelector("#locationDisplay").innerHTML = newPosit.lat + " - " + newPosit.long;
+        // console.log("You clicked it. - New position:");
+        // console.log(newPosit);
         buildAMap(newPosit);
     }
 
@@ -363,6 +366,8 @@ Add Three JS structures to render animation
         getElevationFromAPI(url, bod);
     }
 
+    document.querySelector("#titleDisplay").innerHTML = titleStr;
+    document.querySelector("#locationDisplay").innerHTML = coord.lat + " - " + coord.long;
     buildAMap(coord);
 
 }());
