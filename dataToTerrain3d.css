@@ -1,3 +1,19 @@
 body {
     background-color: #aaaaaa;
 }
+
+/*
+#wrapper {
+    width: 100%;
+    min-width: 300px;
+    height: 640px;
+    margin: auto;
+}
+*/
+#display {
+    min-width: 400px;
+    width: 100%;
+    height: 600px;
+    margin: auto;
+}
+

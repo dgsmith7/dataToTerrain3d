@@ -128,6 +128,7 @@ Add Three JS structures to render animation
         buildTerrainFromData();
         addOrbitControls();
         window.addEventListener("resize", onWindowResize);
+        onWindowResize();
         animate();
     }
 
@@ -169,9 +170,13 @@ Add Three JS structures to render animation
             antialias: true,
             canvas: canv
         });
-        renderer.setSize(window.innerWidth, window.innerHeight, true);
-//        renderer.setSize(canv.clientWidth, canv.clientHeight, false);
-        renderer.setPixelRatio(window.devicePixelRatio || 1);
+
+        //       renderer.setPixelRatio(window.devicePixelRatio || 1);
+//        renderer.setSize(window.innerWidth, window.innerHeight, true);
+        // or!      If ypu change this change the window resize too
+        renderer.setSize(canv.clientWidth, canv.clientHeight, false);
+        renderer.setPixelRatio((canv.clientWidth / canv.clientHeight) || 1);
+
         //container = renderer.domElement;
         //document.body.appendChild(container);
         container = document.getElementById("wrapper");
@@ -195,9 +200,10 @@ Add Three JS structures to render animation
     function buildTerrain() {
         // right now we are just throwing a standard block animation into the canvas.
         // Later we will build terrain with elevationArray.  -  se funtion below
-        geometry = new THREE.BoxGeometry(2, 2, 2);
+        //       geometry = new THREE.BoxGeometry(1, 1, 1);
+        geometry = new THREE.SphereGeometry(1);
         material = new THREE.MeshPhongMaterial({
-            color: "purple",
+            color: "red",
             side: THREE.DoubleSide,
         });
         mesh = new THREE.Mesh(geometry, material);
@@ -317,9 +323,17 @@ Add Three JS structures to render animation
     }
 
     function onWindowResize() {
-        camera.aspect = window.innerWidth / window.innerHeight;
+        // camera.aspect = window.innerWidth / window.innerHeight;
+        // camera.updateProjectionMatrix();
+        // renderer.setSize(window.innerWidth, window.innerHeight);
+// or
+        let canv = document.getElementById("display");
+
+        camera.aspect = canv.clientWidth / canv.clientHeight;
+        renderer.setPixelRatio((canv.clientWidth / canv.clientHeight) || 1);
+
         camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
+        //       renderer.setSize(canv.clientWidth, canv.clientHeight);
     }
 
 
