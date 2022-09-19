@@ -11,9 +11,3 @@ By the way - Phi = Latitude, Lambda = Longitude.
 
 I added a github pages deployment for this too. See the side menus on this repo.
 
-TODO:  
-Lighting
-Palette
-Initial cam position
-styling of page in general
-speed of autorotate?

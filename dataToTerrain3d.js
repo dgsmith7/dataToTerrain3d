@@ -22,14 +22,20 @@ get lat long of "box" from form using data entry form
 Fix up appearance of page
 Allow user to "save" maps
 Add screenshot button to make image of canvas
+Lighting
+Palette
+styling of page in general
+modularize all of this
 
 In progress:
 
 Done:
+speed of autorotate?
 build array of data points for request
 Figure out API request
 parse API result JSON, building elevation grid
 Add Three JS structures to render animation
+make canvas bg
 */
 
 (function () {
@@ -343,6 +349,7 @@ Add Three JS structures to render animation
         controls.minDistance = 5;
         controls.maxDistance = 1500;
         controls.autoRotate = true;
+        controls.autoRotateSpeed = 1;
     }
 
     function getPalletteSample(t, pallette) {
