@@ -32,7 +32,7 @@ parse API result JSON, building elevation grid
 Add Three JS structures to render animation
 */
 
-(function() {
+(function () {
     //Three stuff:
     let container,
         scene,
@@ -48,36 +48,36 @@ Add Three JS structures to render animation
 
     //Other stuff:
     let coord = {lat: 37.500, long: 127.600}; // Battle of ChipYongNi - lat-long to 2 decimal places
-    let elevMatrix = [];
+    let elevationArray = [];
     let url = "";
     let bod = "";
     let pointsDim = 50; // make a power of 10 please unless you wanna refactor
     let totalPoints = pointsDim * pointsDim;
     let gap = 0.05 / pointsDim;
-     let pallette = {
-         p1: { x: 0.61, y: 0.87, z: 0.33 },
-         p2: { x: 0.72, y: 0.51, z: 0.3 },
-         p3: { x: 0.38, y: 0.4, z: 0.74 },
-         p4: { x: 0.38, y: 0.36, z: 0.27 },
-     };
+    let pallette = {
+        p1: {x: 0.61, y: 0.87, z: 0.33},
+        p2: {x: 0.72, y: 0.51, z: 0.3},
+        p3: {x: 0.38, y: 0.4, z: 0.74},
+        p4: {x: 0.38, y: 0.36, z: 0.27},
+    };
 
-     function processForm() {
-         for (let i = 0; i < 500; i += i) {
-             console.log(i);
-         }
-     }
+    function processForm() {
+        for (let i = 0; i < 500; i += i) {
+            console.log(i);
+        }
+    }
 
     function buildRequest(posit) { // posit is an object {latitude to 2 decimal places, longitude to 2 decimal places}
         url = "https://api.open-elevation.com/api/v1/lookup";
         let bodStr = '{"locations": [';
-        for (let i = 0; i < pointsDim; i ++) {
-            for (let j = 0; j < pointsDim; j ++) {
-                let latitude = (posit.lat - (i*gap)).toFixed(3);
-                let longitude = (posit.long + (j*gap)).toFixed(3);
+        for (let i = 0; i < pointsDim; i++) {
+            for (let j = 0; j < pointsDim; j++) {
+                let latitude = (posit.lat - (i * gap)).toFixed(3);
+                let longitude = (posit.long + (j * gap)).toFixed(3);
                 bodStr += '{"latitude": ' + latitude + ', "longitude": ' + longitude + '},'
             }
         }
-        bodStr = bodStr.slice(0, bodStr.length-1);
+        bodStr = bodStr.slice(0, bodStr.length - 1);
         bodStr += ']}';
         //console.log(url);
         //console.log(bodStr);
@@ -88,38 +88,42 @@ Add Three JS structures to render animation
     function getElevationFromAPI(url, input) {
 //        let elevArray = [];
 //        let resp =
-            fetch(url, {
-                method: 'POST',
+        fetch(url, {
+            method: 'POST',
 //               mode: 'no-cors',
-                credentials: 'same-origin',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(input)
-            })
+            credentials: 'same-origin',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(input)
+        })
             .then((response) => (response.json()))
-            .then ((data) => {
+            .then((data) => {
 //             console.log(data.results[0].elevation);  // elev for one point
 //             console.log("From inside: ");
-                for(let i = 0; i < totalPoints; i++) {elevMatrix.push(data.results[i].elevation)};
-//              console.log(elevMatrix);
+                elevationArray = [];  // clear out old data from previous request
+                for (let i = 0; i < totalPoints; i++) {
+                    elevationArray.push(data.results[i].elevation)
+                }
+                ;
+                console.log(elevationArray);
 //              init();
             })
             .then(init)
-            .catch(errorMsg => { console.log(errorMsg);});
+            .catch(errorMsg => {
+                console.log(errorMsg);
+            });
 //          return elevArray;
     }
 
     function init() { // I want this to go only after data is fetched
         //console.log("From outside: ");
-        //console.log("data is: " + elevMatrix);
+        //console.log("data is: " + elevationArray);
         setScene();
         setCamera();
         setLights();
         buildRenderer();
-        container = renderer.domElement;
-        document.body.appendChild(container);
         buildTerrain();
         buildTerrainFromData();
         addOrbitControls();
@@ -129,7 +133,7 @@ Add Three JS structures to render animation
 
     function setScene() {
         scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x000000);
+        scene.background = new THREE.Color(0xaaaaaa);
     }
 
     function setCamera() {
@@ -155,7 +159,7 @@ Add Three JS structures to render animation
         spotLt.position.set(5, 1, 2);
         spotLt.decay = 2.0;
         scene.add(spotLt);
-}
+    }
 
     function buildRenderer() {
         // trying to put renderer into a canvas I made instead of the one Three makes:
@@ -165,9 +169,13 @@ Add Three JS structures to render animation
             antialias: true,
             canvas: canv
         });
-//      renderer.setSize(window.innerWidth, window.innerHeight, true);
-        renderer.setSize(canv.clientWidth, canv.clientHeight, true);
+        renderer.setSize(window.innerWidth, window.innerHeight, true);
+//        renderer.setSize(canv.clientWidth, canv.clientHeight, false);
         renderer.setPixelRatio(window.devicePixelRatio || 1);
+        //container = renderer.domElement;
+        //document.body.appendChild(container);
+        container = document.getElementById("wrapper");
+        container.appendChild(renderer.domElement);
     }
 
     function animate() {
@@ -186,7 +194,7 @@ Add Three JS structures to render animation
 
     function buildTerrain() {
         // right now we are just throwing a standard block animation into the canvas.
-        // Later we will build terrain with elevMatrix.  -  se funtion below
+        // Later we will build terrain with elevationArray.  -  se funtion below
         geometry = new THREE.BoxGeometry(2, 2, 2);
         material = new THREE.MeshPhongMaterial({
             color: "purple",
@@ -198,27 +206,29 @@ Add Three JS structures to render animation
     }
 
     function buildTerrainFromData() {
-        let maxElev = Math.max(...elevMatrix);
+        let maxElev = Math.max(...elevationArray);
+        let minElev = Math.min(...elevationArray);
+        let elevDiff = maxElev - minElev;
         //resize elev data
-        for (let i = 0; i < elevMatrix.length; i ++) {
-            elevMatrix[i] /= 50.0;
+        for (let i = 0; i < elevationArray.length; i++) {
+            elevationArray[i] = (elevationArray[i] / 100.0) - (maxElev / 100.0);
         }
-        //console.log('After shift: ' + elevMatrix);
+        //console.log('After shift: ' + elevationArray);
         // build
         let vertices = [];
-        for (let i = 0; i < pointsDim - 1; i ++) {
+        for (let i = 0; i < pointsDim - 1; i++) {
             for (let j = 0; j < pointsDim - 1; j++) {
                 let idx = (i * pointsDim) + j;
-                let cv = getPalletteSample(elevMatrix[idx]/maxElev, pallette);
+                let cv = getPalletteSample(elevationArray[idx] / maxElev, pallette);
                 let colVal = [cv.r, cv.g, cv.b];
                 vertices.push({
-                    pos: [i - pointsDim / 2, elevMatrix[i * pointsDim + j], j - pointsDim / 2],
+                    pos: [i - pointsDim / 2, elevationArray[i * pointsDim + j], j - pointsDim / 2],
                     col: colVal,
                 });
                 vertices.push({
                     pos: [
                         i + 1 - pointsDim / 2,
-                        elevMatrix[(i + 1) * pointsDim + j],
+                        elevationArray[(i + 1) * pointsDim + j],
                         j - pointsDim / 2,
                     ],
                     col: colVal,
@@ -226,7 +236,7 @@ Add Three JS structures to render animation
                 vertices.push({
                     pos: [
                         i - pointsDim / 2,
-                        elevMatrix[i * pointsDim + (j + 1)],
+                        elevationArray[i * pointsDim + (j + 1)],
                         j + 1 - pointsDim / 2,
                     ],
                     col: colVal,
@@ -234,7 +244,7 @@ Add Three JS structures to render animation
                 vertices.push({
                     pos: [
                         i + 1 - pointsDim / 2,
-                        elevMatrix[(i + 1) * pointsDim + j],
+                        elevationArray[(i + 1) * pointsDim + j],
                         j - pointsDim / 2,
                     ],
                     col: colVal,
@@ -242,7 +252,7 @@ Add Three JS structures to render animation
                 vertices.push({
                     pos: [
                         i + 1 - pointsDim / 2,
-                        elevMatrix[(i + 1) * pointsDim + (j + 1)],
+                        elevationArray[(i + 1) * pointsDim + (j + 1)],
                         j + 1 - pointsDim / 2,
                     ],
                     col: colVal,
@@ -250,7 +260,7 @@ Add Three JS structures to render animation
                 vertices.push({
                     pos: [
                         i - pointsDim / 2,
-                        elevMatrix[i * pointsDim + (j + 1)],
+                        elevationArray[i * pointsDim + (j + 1)],
                         j + 1 - pointsDim / 2,
                     ],
                     col: colVal,
@@ -312,23 +322,33 @@ Add Three JS structures to render animation
         renderer.setSize(window.innerWidth, window.innerHeight);
     }
 
-    function showFormData() {
-        console.log("Dumping form data.");
-        console.log(document.getElementById("latitude").value);
-        console.log(document.getElementById("longitude").value);
-        console.log(document.getElementById("title").value);
-    }
 
     // async function go() {
     //      document.getElementById("locDataSubmitButton").onclick = showFormData;
     //      buildRequest(coord);
-    //      elevMatrix = await getElevationFromAPI(url, bod);//.then(() => init());
+    //      elevationArray = await getElevationFromAPI(url, bod);//.then(() => init());
     //     // moved init into success area of API call promise
     // }
 
     //go();
-     document.getElementById("locDataSubmitButton").onclick = showFormData;
-     buildRequest(coord);
-     getElevationFromAPI(url, bod);
 
-} ());
+    document.getElementById("locDataSubmitButton").onclick = buttonClicked;
+
+    function buttonClicked() {
+        let titleStr = document.getElementById("title").value
+        let latPosit = Number(document.getElementById("latitude").value);
+        let longPosit = Number(document.getElementById("longitude").value);
+        let newPosit = {lat: latPosit, long: longPosit};
+        console.log("You clicked it. - New position:");
+        console.log(newPosit);
+        buildAMap(newPosit);
+    }
+
+    function buildAMap(posit) {
+        buildRequest(posit);
+        getElevationFromAPI(url, bod);
+    }
+
+    buildAMap(coord);
+
+}());
