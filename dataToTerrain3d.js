@@ -33,20 +33,7 @@ Add Three JS structures to render animation
 */
 
 (function () {
-    //Three stuff:
-    let container,
-        scene,
-        camera,
-        renderer,
-        ambLt,
-        dirLt,
-        spotLt,
-        geometry,
-        material,
-        mesh,
-        controls;
 
-    //Other stuff:
     let coord = {lat: 37.500, long: 127.600}; // Battle of ChipYongNi - lat-long to 2 decimal places
     let titleStr = "The Battle of Chipyong-ni";
     let elevationArray = [];
@@ -55,12 +42,6 @@ Add Three JS structures to render animation
     let pointsDim = 50; // make a power of 10 please unless you wanna refactor
     let totalPoints = pointsDim * pointsDim;
     let gap = 0.05 / pointsDim;
-    let pallette = {
-        p1: {x: 0.61, y: 0.87, z: 0.33},
-        p2: {x: 0.72, y: 0.51, z: 0.3},
-        p3: {x: 0.38, y: 0.4, z: 0.74},
-        p4: {x: 0.38, y: 0.36, z: 0.27},
-    };
 
     function processForm() {
         for (let i = 0; i < 500; i += i) {
@@ -118,6 +99,62 @@ Add Three JS structures to render animation
 //          return elevArray;
     }
 
+// async function go() {
+//      document.getElementById("locDataSubmitButton").onclick = showFormData;
+//      buildRequest(coord);
+//      elevationArray = await getElevationFromAPI(url, bod);//.then(() => init());
+//     // moved init into success area of API call promise
+// }
+
+//go();
+
+    document.getElementById("locDataSubmitButton").onclick = buttonClicked;
+
+    function buttonClicked() {
+        let titleStr = document.getElementById("title").value
+        let latPosit = Number(document.getElementById("latitude").value);
+        let longPosit = Number(document.getElementById("longitude").value);
+        let newPosit = {lat: latPosit, long: longPosit};
+        document.querySelector("#titleDisplay").innerHTML = document.getElementById("title").value;
+        document.querySelector("#locationDisplay").innerHTML = newPosit.lat + " - " + newPosit.long;
+        // console.log("You clicked it. - New position:");
+        // console.log(newPosit);
+        buildAMap(newPosit);
+    }
+
+    function buildAMap(posit) {
+        buildRequest(posit);
+        getElevationFromAPI(url, bod);
+    }
+
+    document.querySelector("#titleDisplay").innerHTML = titleStr;
+    document.querySelector("#locationDisplay").innerHTML = coord.lat + " - " + coord.long;
+    buildAMap(coord);
+
+////////////////////////Three JS stuff below this line
+
+    //Three stuff:
+    let container,
+        scene,
+        camera,
+        renderer,
+        ambLt,
+        dirLt,
+        spotLt,
+        geometry,
+        material,
+        mesh,
+        controls;
+
+
+    let pallette = {
+        p1: {x: 0.61, y: 0.87, z: 0.33},
+        p2: {x: 0.72, y: 0.51, z: 0.3},
+        p3: {x: 0.38, y: 0.4, z: 0.74},
+        p4: {x: 0.38, y: 0.36, z: 0.27},
+    };
+
+
     function init() { // I want this to go only after data is fetched
         //console.log("From outside: ");
         //console.log("data is: " + elevationArray);
@@ -145,9 +182,9 @@ Add Three JS structures to render animation
             1,
             1000
         );
-        camera.position.x = 5;
-        camera.position.y = 3;
-        camera.position.z = 5;
+        camera.position.x = 35;
+        camera.position.y = 17;
+        camera.position.z = 35;
         scene.add(camera);
     }
 
@@ -337,37 +374,5 @@ Add Three JS structures to render animation
         //       renderer.setSize(canv.clientWidth, canv.clientHeight);
     }
 
-
-    // async function go() {
-    //      document.getElementById("locDataSubmitButton").onclick = showFormData;
-    //      buildRequest(coord);
-    //      elevationArray = await getElevationFromAPI(url, bod);//.then(() => init());
-    //     // moved init into success area of API call promise
-    // }
-
-    //go();
-
-    document.getElementById("locDataSubmitButton").onclick = buttonClicked;
-
-    function buttonClicked() {
-        let titleStr = document.getElementById("title").value
-        let latPosit = Number(document.getElementById("latitude").value);
-        let longPosit = Number(document.getElementById("longitude").value);
-        let newPosit = {lat: latPosit, long: longPosit};
-        document.querySelector("#titleDisplay").innerHTML = document.getElementById("title").value;
-        document.querySelector("#locationDisplay").innerHTML = newPosit.lat + " - " + newPosit.long;
-        // console.log("You clicked it. - New position:");
-        // console.log(newPosit);
-        buildAMap(newPosit);
-    }
-
-    function buildAMap(posit) {
-        buildRequest(posit);
-        getElevationFromAPI(url, bod);
-    }
-
-    document.querySelector("#titleDisplay").innerHTML = titleStr;
-    document.querySelector("#locationDisplay").innerHTML = coord.lat + " - " + coord.long;
-    buildAMap(coord);
 
 }());

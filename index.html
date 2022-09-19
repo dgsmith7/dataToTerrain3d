@@ -11,9 +11,10 @@
 <body>
 <!-- Add a bootstrap 'collapse' or a 'modal' that says "new location" which opens form.  Breif Explanation at top.  Display value of current map at top of map.  -->
 
+<canvas id="display"></canvas>
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-sm-3 col-md-3">
+    <div class="row seeThru">
+        <div class="col-sm-3 col-md-3 seeThru">
             <br/>
             <br/>
             <p>Phi-Lambda (Latitude-Longitude) to Map</p>
@@ -27,7 +28,7 @@
             <p id="locationDisplay"></p>
         </div>
         <div id="wrapper" class="col-sm-6 col-md-6">
-            <canvas id="display"></canvas>
+            <!--canvas id="display"></canvas-->
         </div>
         <div class="col-sm-3 col-md-3">
             <br/>
@@ -58,5 +59,6 @@
 <script src="./libJS/three.js"></script>
 <script src=./libJS/OrbitControls.js></script>
 <script src="./dataToTerrain3d.js"></script>
+
 </body>
 </html>
