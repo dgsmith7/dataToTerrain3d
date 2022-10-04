@@ -16,3 +16,4 @@ CSS Grid
 Rerack API querie for a higher density grid.  (multiple queries combined will accomplish)
 Improve form
 Improve readme
+Use THREE temple once its finished instead of this THREE
