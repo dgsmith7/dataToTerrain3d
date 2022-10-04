@@ -11,3 +11,8 @@ By the way - Phi = Latitude, Lambda = Longitude.
 
 I added a github pages deployment for this too. See the side menus on this repo.
 
+TODO
+CSS Grid
+Rerack API querie for a higher density grid.  (multiple queries combined will accomplish)
+Improve form
+Improve readme

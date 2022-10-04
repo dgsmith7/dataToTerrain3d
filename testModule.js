@@ -33,7 +33,7 @@ class Anim {
         this.setCamera();
         this.setLights();
         this.buildRenderer();
-        this.buildTerrain();
+        this.redBallAtOrigin();
         this.buildTerrainFromData();
         this.addOrbitControls();
         window.addEventListener("resize", this.onWindowResize);
@@ -106,7 +106,7 @@ class Anim {
         this.controls.update();
     }
 
-    buildTerrain() {
+    redBallAtOrigin() {
         // right now we are just throwing a standard block animation into the canvas.
         // Later we will build terrain with elevationArray.  -  se function below
         //       geometry = new THREE.BoxGeometry(1, 1, 1);
