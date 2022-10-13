@@ -17,10 +17,10 @@ body {
 
 #display {
     position: absolute;
-    width: 90vw;
-    height: 90vw;
-    top: 5%;
-    left: 5%;
+    width: 100vw;
+    height: 100vw;
+    top: 0%;
+    left: 0%;
     /*    outline: none;*/
     z-index: -1;
     border: 1px solid red;
