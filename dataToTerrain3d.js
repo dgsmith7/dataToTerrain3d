@@ -38,7 +38,6 @@ Add Three JS structures to render animation
 make canvas bg
 */
 
-import * as animation from './testModule.js';
 
 (function () {
 
@@ -87,7 +86,7 @@ import * as animation from './testModule.js';
                 console.log(elevationArray);
             })
             .then(() => {
-                let anim = new animation.Anim(elevationArray, pointsDim);
+                let anim = new Anim(elevationArray, pointsDim);
                 anim.init();
             })
             .catch(errorMsg => {

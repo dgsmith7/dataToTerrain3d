@@ -80,16 +80,16 @@ class Anim {
             canvas: canv
         });
 
-        //       renderer.setPixelRatio(window.devicePixelRatio || 1);
-//        renderer.setSize(window.innerWidth, window.innerHeight, true);
+        this.renderer.setPixelRatio(window.devicePixelRatio || 1);
+        this.renderer.setSize(window.innerWidth, window.innerHeight, true);
         // or!      If ypu change this change the window resize too
-        this.renderer.setSize(canv.clientWidth, canv.clientHeight, false);
-        this.renderer.setPixelRatio((canv.clientWidth / canv.clientHeight) || 1);
+        // this.renderer.setSize(canv.clientWidth, canv.clientHeight, false);
+        // this.renderer.setPixelRatio((canv.clientWidth / canv.clientHeight) || 1);
 
-        //container = renderer.domElement;
-        //document.body.appendChild(container);
-        this.container = document.getElementById("wrapper");
-        this.container.appendChild(this.renderer.domElement);
+        // this.container = this.renderer.domElement;
+        // document.body.appendChild(this.container);
+        this.container = document.getElementById("display");
+//        this.container.appendChild(this.renderer.domElement);
     }
 
     animate() {
@@ -237,16 +237,15 @@ class Anim {
         // this.camera.updateProjectionMatrix();
         // this.renderer.setSize(window.innerWidth, window.innerHeight);
 // or
-        let canv = document.getElementById("wrapper");
-
-        this.camera.aspect = (canv.clientWidth / canv.clientHeight);
-        this.renderer.setPixelRatio((canv.clientWidth / canv.clientHeight) || 1.0);
+        let canv = document.getElementById("display");
+//        console.log(this.camera.aspect, canv);
+        this.camera.aspect = (canv.width / canv.height);
+        this.renderer.setPixelRatio((canv.width / canv.height) || 1.0);
 
         this.camera.updateProjectionMatrix();
-        //       renderer.setSize(canv.clientWidth, canv.clientHeight);
+//         //       renderer.setSize(canv.clientWidth, canv.clientHeight);
 
     }
 
 }
 
-export {Anim};
