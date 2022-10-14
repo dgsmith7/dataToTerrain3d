@@ -11,7 +11,7 @@
 <body>
 <header>
     <div class="container-fluid">
-        <div class="col-10 seeThru">
+        <div class="col-10 position-absolute top-0 start-50 translate-middle-x text-center seeThru">
             <p>Phi-Lambda to Terrain</p>
             <p>(Latitude-Longitude to 3d Map)</p>
             <div col-8>
@@ -83,14 +83,14 @@
         <!-- container for canvas for threeJS webgl context  -->
         <div class="row">
             <div id="wrapper" class="col">
-                <canvas id="display"></canvas>
+                <canvas id="display" class="position-absolute top-50 start-50 translate-middle"></canvas>
             </div>
         </div>
     </div>
 </main>
 <!-- api and library info for user -->
 <footer>
-    <div>
+    <div class="position-absolute bottom-0 start-50 translate-middle-x text-center seeThru">
         <p>This site uses <a href="https://threejs.org">ThreeJS</a> and the <a href="https://open-elevation.com">Open
             Elevation</a> API</p>
     </div>

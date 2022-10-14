@@ -53,9 +53,9 @@ class Anim {
             1,
             1000
         );
-        this.camera.position.x = 35;
-        this.camera.position.y = 17;
-        this.camera.position.z = 35;
+        this.camera.position.x = 87;
+        this.camera.position.y = 27;
+        this.camera.position.z = 87;
         this.scene.add(this.camera);
     }
 
@@ -233,17 +233,18 @@ class Anim {
     }
 
     onWindowResize() {
-        // camera.aspect = window.innerWidth / window.innerHeight;
-        // camera.updateProjectionMatrix();
-        // renderer.setSize(window.innerWidth, window.innerHeight);
+        // this.camera.aspect = window.innerWidth / window.innerHeight;
+        // this.camera.updateProjectionMatrix();
+        // this.renderer.setSize(window.innerWidth, window.innerHeight);
 // or
-        let canv = document.getElementById("display");
+        let canv = document.getElementById("wrapper");
 
-        this.camera.aspect = canv.clientWidth / canv.clientHeight;
-        this.renderer.setPixelRatio((canv.clientWidth / canv.clientHeight) || 1);
+        this.camera.aspect = (canv.clientWidth / canv.clientHeight);
+        this.renderer.setPixelRatio((canv.clientWidth / canv.clientHeight) || 1.0);
 
         this.camera.updateProjectionMatrix();
         //       renderer.setSize(canv.clientWidth, canv.clientHeight);
+
     }
 
 }
