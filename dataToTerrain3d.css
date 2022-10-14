@@ -26,3 +26,9 @@ body {
     z-index: -1;
     border: 1px solid red;
 }
+
+#new-posit-button {
+    position: absolute;
+    width: 95%;
+    height: 95%;
+}
