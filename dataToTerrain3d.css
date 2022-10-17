@@ -16,14 +16,14 @@ body {
     color: black;
 }
 
-#display {
-    position: absolute;
-    width: 100vw; /*min(96vw, 96vh);*/
-    height: 100vw; /*(96vw, 96vh);*/
-    top: 0%;
-    left: 0%;
-    z-index: -1;
-}
+/*#display {*/
+/*    position: absolute;*/
+/*    width: 100vw; !*min(96vw, 96vh);*!*/
+/*    height: 100vw; !*(96vw, 96vh);*!*/
+/*    top: 0%;*/
+/*    left: 0%;*/
+/*    z-index: -1;*/
+/*}*/
 
 #new-posit-button {
     position: absolute;

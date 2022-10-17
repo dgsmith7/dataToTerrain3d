@@ -233,18 +233,17 @@ class Anim {
     }
 
     onWindowResize() {
-        // this.camera.aspect = window.innerWidth / window.innerHeight;
-        // this.camera.updateProjectionMatrix();
-        // this.renderer.setSize(window.innerWidth, window.innerHeight);
-// or
-        let canv = document.getElementById("display");
-//        console.log(this.camera.aspect, canv);
-        this.camera.aspect = (canv.width / canv.height);
-        this.renderer.setPixelRatio((canv.width / canv.height) || 1.0);
-
+        // console.log(this.camera.aspect);
+        this.camera.aspect = window.innerWidth / window.innerHeight;
         this.camera.updateProjectionMatrix();
-//         //       renderer.setSize(canv.clientWidth, canv.clientHeight);
-
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        // or
+        // let canv = document.getElementById("wrapper");
+        //
+        // this.camera.aspect = canv.clientWidth / canv.clientHeight;
+        // this.renderer.setPixelRatio((canv.clientWidth / canv.clientHeight) || 1);
+        //
+        this.camera.updateProjectionMatrix();
     }
 
 }
