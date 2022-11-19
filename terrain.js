@@ -3,7 +3,7 @@ function buildTerrain() {   // from Baconbits Terranium
     //  put all of your geometry and materials in here
     maxElev = 0;
     //  calculateNoiseGrid();
-    let terrainData = calculateNoiseGridV2(0);
+    let terrainData;// = calculateNoiseGridV2(0);
     lowerData = terrainData.grid;
     ldMax = terrainData.max;
 

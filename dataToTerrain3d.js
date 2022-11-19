@@ -41,8 +41,10 @@ make canvas bg
 
 (function () {
 
+    let origCoord = {lat: 37.500, long: 127.600}; // Battle of ChipYongNi - lat-long to 2 decimal places
     let coord = {lat: 37.500, long: 127.600}; // Battle of ChipYongNi - lat-long to 2 decimal places
     let titleStr = "The Battle of Chipyong-ni";
+    let quadrant = [[], [], [], []];
     let elevationArray = [];
     let url = "";
     let bod = "";
@@ -65,7 +67,7 @@ make canvas bg
         bod = JSON.parse(bodStr);
     }
 
-    function getElevationFromAPI(url, input) {
+    function getElevationFromAPI(url, input, idx) {
         fetch(url, {
             method: 'POST',
 //               mode: 'no-cors',
@@ -76,18 +78,58 @@ make canvas bg
             },
             body: JSON.stringify(input)
         })
-            .then((response) => (response.json()))
+            .then((response) => {
+                console.log("response - ", response);
+//                console.log('response.data', response.data);
+//                console.log("response.json() - ", response.json());
+//                console.log('data', data);
+                return response.json()
+            })
             .then((data) => {
-                elevationArray = [];  // clear out old data from previous request
+                console.log(data);
+                //elevationArray = [];  // clear out old data from previous request
                 for (let i = 0; i < totalPoints; i++) {
-                    elevationArray.push(data.results[i].elevation)
+                    quadrant[idx].push(data.results[i].elevation)
                 }
                 ;
-                console.log(elevationArray);
+                console.log(quadrant[idx]);
             })
             .then(() => {
-                let anim = new Anim(elevationArray, pointsDim);
-                anim.init();
+                if (idx === 0) {
+                    coord = {
+                        lat: origCoord.lat,
+                        long: origCoord.long + .05
+                    }
+                    buildRequest(coord);// NE
+                    getElevationFromAPI(url, bod, 1);
+                }
+            })
+            .then(() => {
+                if (idx === 1) {
+                    coord = {
+                        lat: origCoord.lat - .05,
+                        long: origCoord.long
+                    }
+                    buildRequest(coord);// SW
+                    getElevationFromAPI(url, bod, 2);
+                }
+            })
+            .then(() => {
+                if (idx === 2) {
+                    coord = {
+                        lat: origCoord.lat - .05,
+                        long: origCoord.long + .05
+                    }
+                    buildRequest(coord);// SE
+                    getElevationFromAPI(url, bod, 3);
+                }
+            })
+            .then(() => {
+                if (idx === 3) {
+                    distribute();
+                    let anim = new Anim(elevationArray, pointsDim * 2);
+                    anim.init();
+                }
             })
             .catch(errorMsg => {
                 console.log(errorMsg);
@@ -106,9 +148,28 @@ make canvas bg
         buildAMap(newPosit);
     }
 
+    function distribute() {
+        for (let i = 0; i < pointsDim; i++) {
+            for (let j = 0; j < pointsDim; j++) {
+                elevationArray.push(quadrant[0][(i * pointsDim) + j])
+            }
+            for (let j = 0; j < pointsDim; j++) {
+                elevationArray.push(quadrant[1][(i * pointsDim) + j])
+            }
+        }
+        for (let i = 0; i < pointsDim; i++) {
+            for (let j = 0; j < pointsDim; j++) {
+                elevationArray.push(quadrant[2][(i * pointsDim) + j])
+            }
+            for (let j = 0; j < pointsDim; j++) {
+                elevationArray.push(quadrant[3][(i * pointsDim) + j])
+            }
+        }
+    }
+
     function buildAMap(posit) {
-        buildRequest(posit);
-        getElevationFromAPI(url, bod);
+        buildRequest(posit);// NW
+        getElevationFromAPI(url, bod, 0);
     }
 
     document.querySelector("#titleDisplay").innerHTML = titleStr;

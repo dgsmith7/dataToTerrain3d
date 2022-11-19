@@ -60,13 +60,13 @@ class Anim {
     }
 
     setLights() {
-        this.ambLt = new THREE.AmbientLight(0xffffff, 0.5);
+        this.ambLt = new THREE.AmbientLight(0xffffff, 0.25);
         this.scene.add(this.ambLt);
         this.dirLt = new THREE.DirectionalLight(0xffffff, 0.5);
         this.dirLt.position.set(0, 15, 0);
         this.scene.add(this.dirLt);
         this.spotLt = new THREE.SpotLight(0xffffff, 0.5);
-        this.spotLt.position.set(5, 1, 2);
+        this.spotLt.position.set(0, 50, 0);
         this.spotLt.decay = 2.0;
         this.scene.add(this.spotLt);
     }
@@ -121,6 +121,8 @@ class Anim {
     }
 
     buildTerrainFromData() {
+        let elevScale = 1.5;
+        let density = .5;
         let maxElev = Math.max(...this.elevationArray);
         let minElev = Math.min(...this.elevationArray);
         let elevDiff = maxElev - minElev;
@@ -137,13 +139,17 @@ class Anim {
                 let cv = this.getPalletteSample(this.elevationArray[idx] / maxElev, this.palette);
                 let colVal = [cv.r, cv.g, cv.b];
                 vertices.push({
-                    pos: [i - this.pointsDim / 2, this.elevationArray[i * this.pointsDim + j], j - this.pointsDim / 2],
+                    pos: [
+                        i - this.pointsDim / 2,
+                        this.elevationArray[i * this.pointsDim + j] * elevScale,
+                        j - this.pointsDim / 2
+                    ],
                     col: colVal,
                 });
                 vertices.push({
                     pos: [
                         i + 1 - this.pointsDim / 2,
-                        this.elevationArray[(i + 1) * this.pointsDim + j],
+                        this.elevationArray[(i + 1) * this.pointsDim + j] * elevScale,
                         j - this.pointsDim / 2,
                     ],
                     col: colVal,
@@ -151,7 +157,7 @@ class Anim {
                 vertices.push({
                     pos: [
                         i - this.pointsDim / 2,
-                        this.elevationArray[i * this.pointsDim + (j + 1)],
+                        this.elevationArray[i * this.pointsDim + (j + 1)] * elevScale,
                         j + 1 - this.pointsDim / 2,
                     ],
                     col: colVal,
@@ -159,7 +165,7 @@ class Anim {
                 vertices.push({
                     pos: [
                         i + 1 - this.pointsDim / 2,
-                        this.elevationArray[(i + 1) * this.pointsDim + j],
+                        this.elevationArray[(i + 1) * this.pointsDim + j] * elevScale,
                         j - this.pointsDim / 2,
                     ],
                     col: colVal,
@@ -167,7 +173,7 @@ class Anim {
                 vertices.push({
                     pos: [
                         i + 1 - this.pointsDim / 2,
-                        this.elevationArray[(i + 1) * this.pointsDim + (j + 1)],
+                        this.elevationArray[(i + 1) * this.pointsDim + (j + 1)] * elevScale,
                         j + 1 - this.pointsDim / 2,
                     ],
                     col: colVal,
@@ -175,7 +181,7 @@ class Anim {
                 vertices.push({
                     pos: [
                         i - this.pointsDim / 2,
-                        this.elevationArray[i * this.pointsDim + (j + 1)],
+                        this.elevationArray[i * this.pointsDim + (j + 1)] * elevScale,
                         j + 1 - this.pointsDim / 2,
                     ],
                     col: colVal,
