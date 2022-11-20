@@ -74,22 +74,41 @@ class Anim {
     buildRenderer() {
         // trying to put renderer into a canvas I made instead of the one Three makes:
         // https://discourse.threejs.org/t/setting-up-renderers-canvas-element-by-html-id/13213
-        let canv = document.getElementById("display");
-        this.renderer = new THREE.WebGLRenderer({
-            antialias: true,
-            canvas: canv
-        });
+        //let canv = document.getElementById("display");
+        /*
+                this.renderer = new THREE.WebGLRenderer({
+                    antialias: true,
+                    //    canvas: canv
+                });
+                this.renderer.setPixelRatio(window.devicePixelRatio || 1);
 
-        this.renderer.setPixelRatio(window.devicePixelRatio || 1);
-        this.renderer.setSize(window.innerWidth, window.innerHeight, true);
-        // or!      If ypu change this change the window resize too
-        // this.renderer.setSize(canv.clientWidth, canv.clientHeight, false);
-        // this.renderer.setPixelRatio((canv.clientWidth / canv.clientHeight) || 1);
+                this.renderer.setSize(window.innerWidth, window.innerHeight, true);
+        //        this.renderer.setPixelRatio(window.devicePixelRatio || 1);
+                // or!      If ypu change this change the window resize too
+                //this.renderer.setSize(canv.clientWidth, canv.clientHeight, false);
+                //this.renderer.setPixelRatio((canv.clientWidth / canv.clientHeight) || 1);
 
-        // this.container = this.renderer.domElement;
-        // document.body.appendChild(this.container);
-        this.container = document.getElementById("display");
-//        this.container.appendChild(this.renderer.domElement);
+                //this.container = this.renderer.domElement;
+                //document.body.appendChild(this.container);
+                document.getElementById("wrapper").appendChild(this.renderer.domElement);
+
+                */
+        // this.renderer.setSize(this.container.clientWidth, this.container.clientHeight, false);
+        // this.renderer.setPixelRatio((this.container.clientWidth / this.container.clientHeight) || 1);
+        //this.container.appendChild(this.renderer.domElement);
+        //document.body.appendChild(this.renderer.domElement);
+        this.renderer = new THREE.WebGLRenderer(
+            {
+                antialias: !0,
+                alpha: !0
+            })
+        this.renderer.setPixelRatio(window.devicePixelRatio);
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.renderer.autoClear = !1;
+        this.renderer.setClearColor(0, 0);
+        document.getElementById("wrapper").appendChild(this.renderer.domElement);
+        //document.body.appendChild(this.renderer.domElement);
+        //container = renderer.domElement;
     }
 
     animate() {
@@ -121,7 +140,7 @@ class Anim {
     }
 
     buildTerrainFromData() {
-        let elevScale = 1.5;
+        let elevScale = 2.0;
         let density = .5;
         let maxElev = Math.max(...this.elevationArray);
         let minElev = Math.min(...this.elevationArray);
@@ -136,8 +155,12 @@ class Anim {
         for (let i = 0; i < this.pointsDim - 1; i++) {
             for (let j = 0; j < this.pointsDim - 1; j++) {
                 let idx = (i * this.pointsDim) + j;
-                let cv = this.getPalletteSample(this.elevationArray[idx] / maxElev, this.palette);
+                let cv = this.getPalletteSample(this.elevationArray[idx] / (maxElev - minElev), this.palette);
                 let colVal = [cv.r, cv.g, cv.b];
+                if (i === 1 && j === 1) {
+                    colVal = [1, 0, 1];
+                }
+
                 vertices.push({
                     pos: [
                         i - this.pointsDim / 2,
@@ -240,16 +263,21 @@ class Anim {
 
     onWindowResize() {
         // console.log(this.camera.aspect);
-        this.camera.aspect = window.innerWidth / window.innerHeight;
+        this.camera.aspectRatio = window.innerWidth / window.innerHeight;
         this.camera.updateProjectionMatrix();
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         // or
-        // let canv = document.getElementById("wrapper");
+        //let canv = document.getElementsByTagName("wrapper");
         //
-        // this.camera.aspect = canv.clientWidth / canv.clientHeight;
-        // this.renderer.setPixelRatio((canv.clientWidth / canv.clientHeight) || 1);
+        //this.camera.aspect = window.innerWidth / window.innerHeight;
+        //this.camera.aspect = canv.clientWidth / canv.clientHeight;
+        //this.camera.updateProjectionMatrix();
+        //this.renderer.setSize((window.innerWidth / window.innerHeight) || 1);
+        //this.renderer.setPixelRatio((canv.clientWidth / canv.clientHeight) || 1);
         //
-        this.camera.updateProjectionMatrix();
+        // this.camera.aspect = window.innerWidth / window.innerHeight;
+        // this.camera.updateProjectionMatrix();
+        // this.renderer.setSize(window.innerWidth, window.innerHeight);
     }
 
 }
