@@ -26,9 +26,7 @@ class Anim {
         this.pointsDim = _pointDimension;
     }
 
-    init() { // I want this to go only after data is fetched
-        //console.log("From outside: ");
-        //console.log("data is: " + elevationArray);
+    init() {
         this.setScene();
         this.setCamera();
         this.setLights();
@@ -37,7 +35,6 @@ class Anim {
         this.buildTerrainFromData();
         this.addOrbitControls();
         window.addEventListener("resize", this.onWindowResize);
-        this.onWindowResize();
         this.animate();
     }
 
@@ -54,16 +51,16 @@ class Anim {
             1000
         );
         this.camera.position.x = 87;
-        this.camera.position.y = 27;
+        this.camera.position.y = 45;
         this.camera.position.z = 87;
         this.scene.add(this.camera);
     }
 
     setLights() {
-        this.ambLt = new THREE.AmbientLight(0xffffff, 0.25);
+        this.ambLt = new THREE.AmbientLight(0xffffff, .25);
         this.scene.add(this.ambLt);
-        this.dirLt = new THREE.DirectionalLight(0xffffff, 0.5);
-        this.dirLt.position.set(0, 15, 0);
+        this.dirLt = new THREE.DirectionalLight(0xffffff, .5);
+        this.dirLt.position.set(10, 5, 0);
         this.scene.add(this.dirLt);
         this.spotLt = new THREE.SpotLight(0xffffff, 0.5);
         this.spotLt.position.set(0, 50, 0);
@@ -72,31 +69,6 @@ class Anim {
     }
 
     buildRenderer() {
-        // trying to put renderer into a canvas I made instead of the one Three makes:
-        // https://discourse.threejs.org/t/setting-up-renderers-canvas-element-by-html-id/13213
-        //let canv = document.getElementById("display");
-        /*
-                this.renderer = new THREE.WebGLRenderer({
-                    antialias: true,
-                    //    canvas: canv
-                });
-                this.renderer.setPixelRatio(window.devicePixelRatio || 1);
-
-                this.renderer.setSize(window.innerWidth, window.innerHeight, true);
-        //        this.renderer.setPixelRatio(window.devicePixelRatio || 1);
-                // or!      If ypu change this change the window resize too
-                //this.renderer.setSize(canv.clientWidth, canv.clientHeight, false);
-                //this.renderer.setPixelRatio((canv.clientWidth / canv.clientHeight) || 1);
-
-                //this.container = this.renderer.domElement;
-                //document.body.appendChild(this.container);
-                document.getElementById("wrapper").appendChild(this.renderer.domElement);
-
-                */
-        // this.renderer.setSize(this.container.clientWidth, this.container.clientHeight, false);
-        // this.renderer.setPixelRatio((this.container.clientWidth / this.container.clientHeight) || 1);
-        //this.container.appendChild(this.renderer.domElement);
-        //document.body.appendChild(this.renderer.domElement);
         this.renderer = new THREE.WebGLRenderer(
             {
                 antialias: !0,
@@ -107,8 +79,6 @@ class Anim {
         this.renderer.autoClear = !1;
         this.renderer.setClearColor(0, 0);
         document.getElementById("wrapper").appendChild(this.renderer.domElement);
-        //document.body.appendChild(this.renderer.domElement);
-        //container = renderer.domElement;
     }
 
     animate() {
@@ -116,7 +86,23 @@ class Anim {
         this.render();
     }
 
+    resizeRendererToDisplaySize(renderer) {
+        const canvas = renderer.domElement;
+        const width = canvas.clientWidth;
+        const height = canvas.clientHeight;
+        const needResize = canvas.width !== width || canvas.height !== height;
+        if (needResize) {
+            renderer.setSize(width, height, false);
+        }
+        return needResize;
+    }
+
     render() {
+        if (this.resizeRendererToDisplaySize(this.renderer)) {
+            const canvas = this.renderer.domElement;
+            this.camera.aspect = canvas.clientWidth / canvas.clientHeight;
+            this.camera.updateProjectionMatrix();
+        }
         this.updateScene();
         this.renderer.render(this.scene, this.camera);
     }
@@ -141,7 +127,7 @@ class Anim {
 
     buildTerrainFromData() {
         let elevScale = 2.0;
-        let density = .5;
+        let yShift = 20;
         let maxElev = Math.max(...this.elevationArray);
         let minElev = Math.min(...this.elevationArray);
         let elevDiff = maxElev - minElev;
@@ -149,7 +135,6 @@ class Anim {
         for (let i = 0; i < this.elevationArray.length; i++) {
             this.elevationArray[i] = (this.elevationArray[i] / 100.0) - (maxElev / 100.0);
         }
-        //console.log('After shift: ' + elevationArray);
         // build
         let vertices = [];
         for (let i = 0; i < this.pointsDim - 1; i++) {
@@ -164,7 +149,7 @@ class Anim {
                 vertices.push({
                     pos: [
                         i - this.pointsDim / 2,
-                        this.elevationArray[i * this.pointsDim + j] * elevScale,
+                        this.elevationArray[i * this.pointsDim + j] * elevScale + yShift,
                         j - this.pointsDim / 2
                     ],
                     col: colVal,
@@ -172,7 +157,7 @@ class Anim {
                 vertices.push({
                     pos: [
                         i + 1 - this.pointsDim / 2,
-                        this.elevationArray[(i + 1) * this.pointsDim + j] * elevScale,
+                        this.elevationArray[(i + 1) * this.pointsDim + j] * elevScale + yShift,
                         j - this.pointsDim / 2,
                     ],
                     col: colVal,
@@ -180,7 +165,7 @@ class Anim {
                 vertices.push({
                     pos: [
                         i - this.pointsDim / 2,
-                        this.elevationArray[i * this.pointsDim + (j + 1)] * elevScale,
+                        this.elevationArray[i * this.pointsDim + (j + 1)] * elevScale + yShift,
                         j + 1 - this.pointsDim / 2,
                     ],
                     col: colVal,
@@ -188,7 +173,7 @@ class Anim {
                 vertices.push({
                     pos: [
                         i + 1 - this.pointsDim / 2,
-                        this.elevationArray[(i + 1) * this.pointsDim + j] * elevScale,
+                        this.elevationArray[(i + 1) * this.pointsDim + j] * elevScale + yShift,
                         j - this.pointsDim / 2,
                     ],
                     col: colVal,
@@ -196,7 +181,7 @@ class Anim {
                 vertices.push({
                     pos: [
                         i + 1 - this.pointsDim / 2,
-                        this.elevationArray[(i + 1) * this.pointsDim + (j + 1)] * elevScale,
+                        this.elevationArray[(i + 1) * this.pointsDim + (j + 1)] * elevScale + yShift,
                         j + 1 - this.pointsDim / 2,
                     ],
                     col: colVal,
@@ -204,7 +189,7 @@ class Anim {
                 vertices.push({
                     pos: [
                         i - this.pointsDim / 2,
-                        this.elevationArray[i * this.pointsDim + (j + 1)] * elevScale,
+                        this.elevationArray[i * this.pointsDim + (j + 1)] * elevScale + yShift,
                         j + 1 - this.pointsDim / 2,
                     ],
                     col: colVal,
@@ -260,25 +245,5 @@ class Anim {
         let c = new THREE.Color(re, gr, bl);
         return c;
     }
-
-    onWindowResize() {
-        // console.log(this.camera.aspect);
-        this.camera.aspectRatio = window.innerWidth / window.innerHeight;
-        this.camera.updateProjectionMatrix();
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
-        // or
-        //let canv = document.getElementsByTagName("wrapper");
-        //
-        //this.camera.aspect = window.innerWidth / window.innerHeight;
-        //this.camera.aspect = canv.clientWidth / canv.clientHeight;
-        //this.camera.updateProjectionMatrix();
-        //this.renderer.setSize((window.innerWidth / window.innerHeight) || 1);
-        //this.renderer.setPixelRatio((canv.clientWidth / canv.clientHeight) || 1);
-        //
-        // this.camera.aspect = window.innerWidth / window.innerHeight;
-        // this.camera.updateProjectionMatrix();
-        // this.renderer.setSize(window.innerWidth, window.innerHeight);
-    }
-
 }
 

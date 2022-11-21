@@ -1,30 +1,11 @@
-* {
-    background-color: #aaaaaa;
-    border: 1px solid red;
-}
-
-
-/*#wrapper {*/
-/*    width: 100%;*/
-/*    !*    min-width: 300px;*!*/
-/*    height: 100%;*/
-/*    !*    !*height: 300px;*!*!*/
-/*    !*    !*width: 300px;*!*!*/
-/*    !*    margin: auto;*!*/
+/** {*/
+/*    background-color: #aaaaaa;*/
+/*    border: 1px solid red;*/
 /*}*/
 
 .seeThru {
-    background-color: #aaaaaa00;
+    background-color: #aaaaaa45;
     color: black;
-}
-
-canvas {
-    position: absolute;
-    width: 100vw; /*min(96vw, 96vh);*/
-    height: 100vw; /*(96vw, 96vh);*/
-    top: 0%;
-    left: 0%;
-    z-index: 1;
 }
 
 #new-posit-button {
@@ -33,10 +14,18 @@ canvas {
     height: 95%;
 }
 
+#titleDisplay {
+    font-style: italic;
+}
+
 html, body {
     margin: 0;
     padding: 0;
     height: 100vh;
+}
+
+#exampleModal {
+    margin-top: 200px;
 }
 
 div {
@@ -44,9 +33,9 @@ div {
     overflow: auto;
 }
 
-#wrapper {
+canvas {
     width: 100%;
-    height: 100%;
+    height: 100vh;
     display: block;
 }
 

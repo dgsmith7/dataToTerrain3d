@@ -11,16 +11,18 @@
 <body>
 <header>
     <div class="container-fluid">
-        <div class="col-10 position-absolute top-0 start-50 translate-middle-x text-center seeThru">
-            <p>Phi-Lambda to Terrain</p>
-            <p>(Latitude-Longitude to 3d Map)</p>
-            <div col-8>
-                <p>Currently displayed: </p>
-                <p>
-                    <span id="titleDisplay"></span>
-                    <span> Location: </span>
-                    <span id="locationDisplay"></span>
-                </p>
+        <div class="row m-2">
+            <div class="col-10 p-3 position-absolute top-0 start-50 translate-middle-x text-center seeThru">
+                <p class="h3">Data to Terrain</p>
+                <p>(Latitude-Longitude to 3d Map)</p>
+                <div col-8>
+                    <p class="h4">Currently displayed: </p>
+                    <p>
+                        <span id="titleDisplay"></span>
+                        <span><em> - Location: </em></span>
+                        <span id="locationDisplay"></span>
+                    </p>
+                </div>
             </div>
         </div>
     </div>
@@ -41,43 +43,43 @@
             </div>
         </div>
         <!-- Modal to enter new location for data call -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Enter a new location</h1>
-                        <!--                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+        <div class="modal fade seeThru" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog seeThru">
+                <div class="modal-content seeThru">
+                    <div class="modal-header seeThru">
+                        <h1 class="modal-title fs-5 seeThru" id="exampleModalLabel">Enter a new location</h1>
                     </div>
-                    <div class="modal-body">
-                        <!--                <div class="col-sm-3 col-md-3">-->
-                        <!--                    <br/>-->
-                        <!--                    <br/>-->
-                        <form id="getLocData">
-                            <legend>Location data:</legend>
-                            <input id="latitude" name="latitude" class="form-control" type="number" size="7"
+                    <div class="modal-body seeThru">
+                        <form id="getLocData" class="seeThru">
+                            <legend class="seeThru">Location data:</legend>
+                            <input id="latitude" name="latitude" class="form-control seeThru" type="number" size="7"
                                    maxlength="7"
                                    min="-89.500" max="90.000"
                                    placeholder="37.500">
-                            <label for="latitude" class="form-label">Please enter the Latitude to 3 decimal
+                            <label for="latitude" class="form-label seeThru">Please enter the Latitude to 3 decimal
                                 places</label>
-                            <input id="longitude" name="longitude" class="form-control" type="number" size="8"
+                            <input id="longitude" name="longitude" class="form-control seeThru" type="number" size="8"
                                    maxlength="8"
                                    min="-179.500"
                                    max="180.000" placeholder="127.600">
-                            <label for="longitude" class="form-label">Please enter the Longitude to 3 decimal places
+                            <label for="longitude" class="form-label seeThru">Please enter the Longitude to 3 decimal
+                                places
                                 (eg.
                                 123.45)</label>
-                            <input id="title" name="title" class="form-control" type="text" size="20" maxlength="20"
+                            <input id="title" name="title" class="form-control seeThru" type="text" size="20"
+                                   maxlength="20"
                                    placeholder="Battle of Chipyong-ni">
-                            <label for="title" class="form-label">Please enter a name for this map.</label>
-                            <button id="locDataSubmitButton" class="form-control" type="button" onclick="">Submit new
+                            <label for="title" class="form-label seeThru">Please enter a name for this map.</label>
+                            <button id="locDataSubmitButton" class="form-control seeThru" type="button" onclick="">
+                                Submit new
                                 location
                             </button>
                         </form>
                         <!--                </div>-->
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <div class="modal-footer seeThru">
+                        <button type="button" class="btn btn-secondary seeThru" data-bs-dismiss="modal">
                             Close
                         </button>
                     </div>
@@ -87,7 +89,6 @@
         <!-- container for canvas for threeJS webgl context  -->
         <div class="container-fluid">
             <div class="row" id="wrapper">
-                <!--canvas id="display"></canvas-->
             </div>
         </div>
     </div>
